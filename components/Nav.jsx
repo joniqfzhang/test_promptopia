@@ -11,11 +11,20 @@ const Nav = () => {
     const [providers, setProviders] = useState(null);
     const [toggleDropdown, setToggleDropdown] = useState(false);
 
+    // useEffect(() => {
+    //     (async () => {
+    //         const res = await getProviders();
+    //         setProviders(res);
+    //     })();
+    // }, []);
+
     useEffect(() => {
-        (async () => {
-            const res = await getProviders();
-            setProviders(res);
-        })();
+        const setUpProviders = async () => {
+            const response = await getProviders();
+            console.log('response', response);
+            setProviders(response);
+        };
+        setUpProviders();
     }, []);
 
     return (
@@ -82,7 +91,8 @@ const Nav = () => {
                             height={37}
                             className='rounded-full'
                             alt='profile'
-                            onClick={() => setToggleDropdown((prev) => !prev)}
+                            onClick={() => setToggleDropdown(setToggleDropdown(!toggleDropdown))}
+                            // onClick={() => setToggleDropdown((prev) => !prev)}
                         />
 
                         {toggleDropdown && (
