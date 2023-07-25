@@ -21,7 +21,7 @@ const Nav = () => {
     useEffect(() => {
         const setUpProviders = async () => {
             const response = await getProviders();
-            console.log('response', response);
+            console.log('getProviders response', response);
             setProviders(response);
         };
         setUpProviders();
@@ -74,7 +74,7 @@ const Nav = () => {
                                     }}
                                     className='black_btn'
                                 >
-                                    Sign in
+                                    Sign in {provider.id}
                                 </button>
                             ))}
                     </>
@@ -91,8 +91,8 @@ const Nav = () => {
                             height={37}
                             className='rounded-full'
                             alt='profile'
-                            onClick={() => setToggleDropdown(setToggleDropdown(!toggleDropdown))}
-                            // onClick={() => setToggleDropdown((prev) => !prev)}
+                            onClick={() => setToggleDropdown(!toggleDropdown)} // this is also working
+                        // onClick={() => setToggleDropdown((prev) => !prev)} // this is callback?
                         />
 
                         {toggleDropdown && (

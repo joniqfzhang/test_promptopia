@@ -9,6 +9,8 @@ const UserSchema = new Schema({
     username: {
         type: String,
         required: [true, 'Username is required!'],
+        // this match may cause issue if your google name not meet the match regular expression pattern, 
+        // such as name length less than 8, need update it
         match: [/^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
             "Username invalid, it should contain 8-20 alphanumeric letters and be unique!"]
     },

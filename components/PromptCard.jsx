@@ -1,32 +1,41 @@
 'use client';
+// import { Suspense } from 'react';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 
 const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
-  console.log('post', post);
-  const { data: session } = useSession();
+  // console.log('post', post);
+  const { data: session, status, update } = useSession();
   const pathName = usePathname();
   const router = useRouter();
+
+  if (status === "loading") {
+    console.log('loading...');
+    return "Loading or not authenticated...";
+  }
+
 
   const [copied, setCopyed] = useState('');
 
   const handleCopy = () => {
     setCopyed(post.prompt);
     navigator.clipboard.writeText(post.prompt);
-    setTimeout(() => setCopyed(''), 3000);
+    // setTimeout(() => setCopyed(''), 3000);
+    setTimeout(() => setCopied(false), 3000);
   };
 
   const handleProfileClick = () => {
     if (post.creator?._id === session?.user.id) {
-      console.log('owner: ', post.creator._id === session?.user.id);
+      console.log('owner: ', post.creator?._id === session?.user.id);
       return router.push("/profile");
     }
     router.push(`/profile/${post.creator?._id}?name=${post.creator?.username}`);
   };
 
   return (
+    // <Suspense fallback={<p>Loading feed...</p>}>
     <div className='prompt_card'>
       <div className='flex justfy-between items-start gap-5'>
         <div className='flex-1 flex justify-start items-center gap-3 cursor-pointer'
@@ -39,6 +48,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
             height={40}
             className='rounded-full object-contain'
           ></Image>
+
           <div className='flex flex-col'>
             <h3 className='font-satoshi font-semibold text-gray-900'>
               {post?.creator?.username}
@@ -61,6 +71,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
           </div>
         </div>
       </div>
+
       <p className='my-4 font-satoshi text-sm text-gray-700 '>{post.prompt}</p>
       <p className='font-inter text-sm blue_gradient cursor-pointer'
         onClick={() => handleTagClick && handleTagClick(post.tag)}>
@@ -84,6 +95,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
       )}
 
     </div>
+    // </Suspense>
   );
 };
 
